@@ -1,0 +1,11 @@
+---
+- hosts: localhost1
+
+  tasks:
+
+  - name: create container with code
+    docker:
+      name: code
+      image: booster
+      volumes:
+      - /home/fat/booster:/data
