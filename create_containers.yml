@@ -1,11 +1,49 @@
 ---
-- hosts: localhost1
+- hosts: localhost
 
   tasks:
 
-  - name: create container with code
+  - name: Create image for aplication server
+    ignore_errors: yes
+    docker_image: path="{{ ansible_env.PWD }}/flask_dokerfile" name="application" state=build
+
+  - name: Create image for aplication server
+    ignore_errors: yes
+    docker_image: path="{{ ansible_env.PWD }}/nginx_dokerfile" name="nginx_cluster" state=build
+
+  - name: create data container
     docker:
-      name: code
-      image: booster
+      name: data_container
+      image: ubuntu
+      state: present
       volumes:
-      - /home/fat/booster:/data
+      - "{{ ansible_env.PWD }}/application:/data"
+
+  - name: Create application server 1
+    docker:
+      name: appserver1
+      image: application
+      state: started
+      volumes_from:
+      - data_container
+
+  - name: Create application server 2
+    docker:
+      name: appserver2
+      image: application
+      state: started
+      volumes_from:
+      - data_container
+
+  - name: Create nginx server
+    docker:
+      name: nginx_balanser
+      image: nginx_cluster
+      state: started
+      volumes_from:
+      - data_container
+      links:
+      - "appserver1:appserver1"
+      - "appserver2:appserver2"
+      ports:
+      - "8080:80"
