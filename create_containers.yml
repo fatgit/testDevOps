@@ -3,15 +3,15 @@
 
   tasks:
 
-  - name: Create image for aplication server
+  - name: Create image of aplication server from Ubuntu image
     ignore_errors: yes
     docker_image: path="{{ ansible_env.PWD }}/flask_dokerfile" name="application" state=build
 
-  - name: Create image for aplication server
+  - name: Create image of Nginx from nginx image
     ignore_errors: yes
     docker_image: path="{{ ansible_env.PWD }}/nginx_dokerfile" name="nginx_cluster" state=build
 
-  - name: create data container
+  - name: Create data container.
     docker:
       name: data_container
       image: ubuntu
