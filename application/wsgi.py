@@ -12,37 +12,51 @@ def index():
 
 @application.route('/app', methods=['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
 def app():
-    print(request.method    )
+    print(request.method)
     return 'ssss'
 
 
 @application.route('/skills', methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
 def skills():
-    f = open('application/skills', 'r')
-    skiill = f.read()
-    print(skiill)
+    print (request.method)
+    if request.method == 'GET':
+        f = open('application/skills', 'r')
+        skills = f.read()
+        file_split = skills.split('\n')
+        print(file_split)
+        text =''
+        for i in file_split:
+            text += i + '<br>'
+        f.close
+
+        return json.dumps({'answer': skills})
+
+    elif request.method == 'POST':
+        skill = request.form['name']
+        f = open('application/skills', 'a')
+        f.write("\n"+skill)
+        f.close
+
+        return json.dumps({'answer': "Save"})
+
+
+    elif request.method == 'PUT':
+        name = request.form['name']
+        f = open('application/skills', 'w')
+        f.write(name)
+        f.close()
+
+        return json.dumps({'answer': 'Save'})
+
+    elif request.method == 'DELETE':
+        f = open('application/skills', 'w')
+        f.write('')
+        f.close()
+
+        return json.dumps({'answer': 'All skills have been removed'})
+
     return "skiill"
 
-
-
-
-@application.route('/messages', methods = ['POST'])
-def api_message():
-
-    if request.headers['Content-Type'] == 'text/plain':
-        return "Text Message: " + request.data
-
-    elif request.headers['Content-Type'] == 'application/json':
-        return "JSON Message: " + json.dumps(request.json)
-
-    elif request.headers['Content-Type'] == 'application/octet-stream':
-        f = open('./binary', 'wb')
-        f.write(request.data)
-        f.close()
-        return "Binary message written!"
-
-    else:
-        return "415 Unsupported Media Type ;)"
 
 if __name__=="__main__":
     # application.run(debug=True)
