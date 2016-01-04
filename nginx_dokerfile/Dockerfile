@@ -13,5 +13,5 @@ run echo "daemon off;" >> /etc/nginx/nginx.conf
 add supervisor-app.conf /root/
 run ln -s /root/supervisor-app.conf /etc/supervisor/conf.d/
 
+#expose 80
 cmd ["supervisord", "-n"]
-expose 80

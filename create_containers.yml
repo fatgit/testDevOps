@@ -12,7 +12,7 @@
     docker_image: path="{{ ansible_env.PWD }}/nginx_dokerfile" name="nginx_cluster" state=build
 
   - name: Create data container.
-    docker:
+    docker: 
       name: data_container
       image: ubuntu
       state: present
@@ -46,4 +46,4 @@
       - "appserver1:appserver1"
       - "appserver2:appserver2"
       ports:
-      - "8080:80"
+      - "127.0.01:80:80"

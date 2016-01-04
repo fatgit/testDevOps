@@ -14,8 +14,8 @@ add supervisor-app.conf /root/
 run ln -s /root/supervisor-app.conf /etc/supervisor/conf.d/
 
 # install uwsgi now because it takes a little while
-run pip install uwsgi
 run pip install flask
+run pip install uwsgi
 
 #expose 5000
 cmd ["supervisord", "-n"]
